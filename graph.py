@@ -46,5 +46,26 @@ def find_edges_in_file(file, g):
                 print(tab)
                 g.add_edge(extract_filename(file)+str(get_file_size(file)), tab[1]+str(get_file_size(tab[1])))
 
+def createGraphFunctions(path="./"):
+    g = nx.DiGraph()  # create direct graph
+    files_to_parse = list(filter(lambda f: f.endswith(".py"), listdir(path))) # only python files
+    funkcje=[]
+    #node'y
+    for file_path in files_to_parse:
+        funkcje+=get_function_names(file_path)
+        for a in funkcje:
+            g.add_node(a)
+
+def get_function_names(path): #function names from file
+    names = []
+    with open(path, 'r') as fr:
+        for number, line in enumerate(fr):
+            if re.match(r"^\s*?def", line):
+                names.append(line.split(" ")[1].split("(")[0])
+                print(names)
+    return names
+
+
+
 g = createGraph()
 drawGraph(g)
